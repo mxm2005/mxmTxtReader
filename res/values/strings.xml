@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MxmTxtReader</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_open">打开</string>
+    <string name="menu_settings">设置</string>
+    <string name="menu_import">导入</string>
+    <string name="read_prechapter">上一章</string>
+    <string name="read_nextchapter">下一章</string>
+
+</resources>
