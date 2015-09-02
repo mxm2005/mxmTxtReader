@@ -2,7 +2,12 @@ package com.example.mxmtxtreader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import com.example.mxmtxtreader.fragment.YesNoDialog;
+import com.example.mxmtxtreader.file.FileService;
+
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,7 +46,8 @@ public class BookActivity extends Activity {
 			// Log.i("tag",text);
 			TextView vName = (TextView) v.findViewById(R.id.book_name);
 			TextView vAddr = (TextView) v.findViewById(R.id.book_addr);
-			Log.i("tag",vName.getText().toString()+"--"+vAddr.getText().toString());
+			Log.i("tag", vName.getText().toString() + "--"
+					+ vAddr.getText().toString());
 
 			Intent inte = new Intent();
 			inte.setClass(BookActivity.this, ReadingActivity.class);
@@ -58,23 +64,55 @@ public class BookActivity extends Activity {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
+		Intent inite = new Intent();
 		int id = item.getItemId();
-		if (id == R.id.menu_settings) {
+		switch (id) {
+		case R.id.menu_openbook:
+			inite.setClass(BookActivity.this, ImportBook.class);
+			startActivity(inite);
+			return true;
+		case R.id.menu_import:
+			inite.setClass(BookActivity.this, ImportBook.class);
+			startActivity(inite);
+			return true;
+		case R.id.menu_settings:
+			DialogFragment dialog = new YesNoDialog();
+			Bundle args = new Bundle();
+			args.putString("title", "test title");
+			args.putString("message", "test messqge");
+			dialog.setArguments(args);
+			int YES_NO_CALL = 101;
+			dialog.setTargetFragment(dialog, YES_NO_CALL);
+			dialog.show(getFragmentManager(), "tag");
 			return true;
 		}
+		// if (id == R.id.menu_settings) {
+		// return true;
+		// }
 		return super.onOptionsItemSelected(item);
 	}
 
+	// 加载图书列表
 	private void LoadBooks(ListView lv) {
 
 		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 		HashMap<String, String> map1 = new HashMap<String, String>();
-		for (int i = 0; i < 100; i++) {
+		ArrayList<String> lstBook = new ArrayList<String>();
+		try {
+			lstBook = FileService.readList(this.getResources().openRawResource(
+					R.drawable.booklist));
+		} catch (Exception ex) {
+			Log.i("exception", ex.getMessage() + ex.getCause());
+		}
+
+		for (int i = 0; i < lstBook.size(); i++) {
 			map1 = new HashMap<String, String>();
-			map1.put("book_name", "BOOK_NAME_" + i);
-			map1.put("book_addr", "BOOK_ADDRESS_" + i);
+			String[] a = lstBook.get(i).split(",");
+			map1.put("book_name", a[0]);
+			map1.put("book_addr", a[1]);
 			list.add(map1);
 		}
+
 		SimpleAdapter listAdapter = new SimpleAdapter(this, list,
 				R.layout.book_item, new String[] { "book_name", "book_addr" },
 				new int[] { R.id.book_name, R.id.book_addr });
