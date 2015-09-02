@@ -1,14 +1,20 @@
 package com.example.mxmtxtreader;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.example.mxmtxtreader.file.FileService;
 
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.annotation.IntDef;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 public class ImportBook extends BaseActivity {
 
@@ -19,8 +25,9 @@ public class ImportBook extends BaseActivity {
 
 		initDir();
 	}
-
-	private void initData() {
+	
+	//load txt file list in the dir
+	private void initData(File[] files) {
 		String[] arrBook = new String[20];
 		for (int i = 0; i < 20; i++) {
 			arrBook[i] = "BOOK--" + i;
@@ -54,7 +61,18 @@ public class ImportBook extends BaseActivity {
 	}
 
 	private void initDir() {
+		File rootPath=Environment.getExternalStorageDirectory();
+		LinearLayout lay=(LinearLayout)findViewById(R.id.lay);
+		TextView tv=new TextView(this);
+		tv.setText(rootPath.getAbsolutePath());
+		lay.addView(tv);
 		
-		initData();
+		if(rootPath.isDirectory()){
+			initData(rootPath.listFiles());
+		}
+		else{
+			TextView vNofile=(TextView)findViewById(R.id.txtNofile);
+			vNofile.setVisibility(View.VISIBLE);
+		}
 	}
 }
