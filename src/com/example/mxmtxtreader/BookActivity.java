@@ -20,7 +20,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-public class BookActivity extends Activity {
+public class BookActivity extends BaseActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +29,6 @@ public class BookActivity extends Activity {
 		ListView lv_books = (ListView) findViewById(R.id.lv_books);
 		LoadBooks(lv_books);
 		lv_books.setOnItemClickListener(new myOnItemClickListener());
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.book, menu);
-		return true;
 	}
 
 	private class myOnItemClickListener implements OnItemClickListener {
@@ -57,39 +50,6 @@ public class BookActivity extends Activity {
 			inte.putExtras(bundle);
 			startActivity(inte);
 		}
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		Intent inite = new Intent();
-		int id = item.getItemId();
-		switch (id) {
-		case R.id.menu_openbook:
-			inite.setClass(BookActivity.this, ImportBook.class);
-			startActivity(inite);
-			return true;
-		case R.id.menu_import:
-			inite.setClass(BookActivity.this, ImportBook.class);
-			startActivity(inite);
-			return true;
-		case R.id.menu_settings:
-			DialogFragment dialog = new YesNoDialog();
-			Bundle args = new Bundle();
-			args.putString("title", "test title");
-			args.putString("message", "test messqge");
-			dialog.setArguments(args);
-			int YES_NO_CALL = 101;
-			dialog.setTargetFragment(dialog, YES_NO_CALL);
-			dialog.show(getFragmentManager(), "tag");
-			return true;
-		}
-		// if (id == R.id.menu_settings) {
-		// return true;
-		// }
-		return super.onOptionsItemSelected(item);
 	}
 
 	// 加载图书列表

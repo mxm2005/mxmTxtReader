@@ -8,6 +8,14 @@
     android:paddingRight="10dip"
     android:paddingTop="1dip" >
 
+    <LinearLayout
+        android:id="@+id/lay"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#333333"
+        android:orientation="horizontal" >
+    </LinearLayout>
+
     <ListView
         android:id="@+id/lstBook"
         android:layout_width="match_parent"

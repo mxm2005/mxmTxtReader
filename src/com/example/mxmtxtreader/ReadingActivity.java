@@ -14,9 +14,8 @@ import android.widget.TextView;
 
 import com.example.mxmtxtreader.file.FileService;
 
-
 @SuppressLint("ShowToast")
-public class ReadingActivity extends Activity {
+public class ReadingActivity extends BaseActivity {
 	private int _pageSize = 0;
 	private int _pageIndex = 0;
 	private long _totalCount = 0;
@@ -27,25 +26,6 @@ public class ReadingActivity extends Activity {
 		setContentView(R.layout.reading_book);
 
 		InitData();
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.book, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.menu_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 
 	private void InitData() {
