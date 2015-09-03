@@ -12,6 +12,8 @@
     <string name="dir_root">根目录</string>
     <string name="dir_returnUp">返回上一层</string>
     <string name="dir_floder">文件夹</string>
+    <string name="dir_file">TXT文件</string>
     <string name="dir_empty">空文件夹，没有符合的文件</string>
+    <string name="dir_more">更多</string>
 
 </resources>

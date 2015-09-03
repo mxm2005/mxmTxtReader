@@ -25,54 +25,71 @@ public class ImportBook extends BaseActivity {
 
 		initDir();
 	}
-	
-	//load txt file list in the dir
-	private void initData(File[] files) {
-		String[] arrBook = new String[20];
-		for (int i = 0; i < 20; i++) {
-			arrBook[i] = "BOOK--" + i;
-		}
-		ListView lv = (ListView) findViewById(R.id.lstBook);
 
+	// load txt file list in the dir
+	private void initData(File[] files) {
 		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+		ArrayList<HashMap<String, String>> lstDir = new ArrayList<HashMap<String, String>>();
 		HashMap<String, String> map1 = new HashMap<String, String>();
 
-		ArrayList<String> lstBook = new ArrayList<String>();
-		try {
-			lstBook = FileService.readList(this.getResources().openRawResource(
-					R.drawable.booklist));
-		} catch (Exception ex) {
-			Log.i("exception", ex.getMessage() + ex.getCause());
+		for (int i = 0; i < files.length; i++) {
+			if (files[i].isDirectory()) {
+				map1 = new HashMap<String, String>();
+				map1.put("book_name", files[i].getName());
+				map1.put("book_addr", files[i].getAbsolutePath());
+				lstDir.add(map1);
+			} else {
+				String fileName = files[i].getName().toLowerCase();
+				if (fileName.endsWith(".txt")) {
+					map1 = new HashMap<String, String>();
+					map1.put("book_name", files[i].getName());
+					map1.put("book_addr", files[i].getAbsolutePath());
+					list.add(map1);
+				}
+			}
 		}
 
-		for (int i = 0; i < lstBook.size(); i++) {
-			map1 = new HashMap<String, String>();
-			String[] a = lstBook.get(i).split(",");
-			map1.put("book_name", a[0]);
-			map1.put("book_addr", a[1]);
-			list.add(map1);
-		}
-
+		ListView lv = (ListView) findViewById(R.id.lstBook);
+		ListView lvDir = (ListView) findViewById(R.id.lstDir);
+		//init list txt files
 		SimpleAdapter listAdapter = new SimpleAdapter(this, list,
 				R.layout.book_item_imp,
 				new String[] { "book_name", "book_addr" }, new int[] {
 						R.id.book_name, R.id.book_addr });
 		lv.setAdapter(listAdapter);
+		//init list dir
+		SimpleAdapter lstDirAdapter = new SimpleAdapter(this, lstDir,
+				R.layout.book_item_imp_dir,
+				new String[] { "book_name", "book_addr" }, new int[] {
+						R.id.book_name, R.id.book_addr });
+		lvDir.setAdapter(lstDirAdapter);
 	}
 
 	private void initDir() {
-		File rootPath=Environment.getExternalStorageDirectory();
-		LinearLayout lay=(LinearLayout)findViewById(R.id.lay);
-		TextView tv=new TextView(this);
+		File rootPath = Environment.getExternalStorageDirectory();
+		LinearLayout lay = (LinearLayout) findViewById(R.id.lay);
+		TextView tv = new TextView(this);
 		tv.setText(rootPath.getAbsolutePath());
 		lay.addView(tv);
-		
-		if(rootPath.isDirectory()){
+
+		if (rootPath.isDirectory()) {
 			initData(rootPath.listFiles());
-		}
-		else{
-			TextView vNofile=(TextView)findViewById(R.id.txtNofile);
+		} else {
+			TextView vNofile = (TextView) findViewById(R.id.txtNofile);
 			vNofile.setVisibility(View.VISIBLE);
 		}
+	}
+
+	/* 检查是否为合法的文件名，或者是否为路径 */
+	private boolean isValidFileOrDir(File file) {
+		if (file.isDirectory()) {
+			return true;
+		} else {
+			String fileName = file.getName().toLowerCase();
+			if (fileName.endsWith(".txt")) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

@@ -5,43 +5,46 @@
     android:orientation="horizontal"
     android:paddingBottom="5dip"
     android:paddingLeft="1dip"
-    android:paddingRight="1dip"
-    android:paddingTop="5dip">
+    android:paddingRight="5dip"
+    android:paddingTop="1dip" >
 
     <ImageView
         android:id="@+id/book_img"
         android:layout_width="24dip"
         android:layout_height="24dip"
-        android:contentDescription="@string/dir_file"
+        android:layout_gravity="left"
+        android:contentDescription="@string/dir_floder"
         android:singleLine="true"
-        android:src="@drawable/file24"
-        android:layout_gravity="left">
+        android:src="@drawable/floder24" >
     </ImageView>
 
     <TextView
         android:id="@+id/book_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:layout_toRightOf="@id/book_img">
+        android:layout_toRightOf="@id/book_img"
+        android:gravity="right" >
     </TextView>
 
     <TextView
         android:id="@+id/book_addr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible" 
-        android:layout_toRightOf="@id/book_name">
+        android:layout_toRightOf="@id/book_name"
+        android:gravity="right"
+        android:visibility="invisible" >
     </TextView>
 
-    <CheckBox
-        android:id="@+id/chkBook"
+    <ImageView
+        android:id="@+id/img_more"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:layout_gravity="right"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@id/book_img">
-    </CheckBox>
+        android:layout_alignTop="@id/book_img"
+        android:layout_gravity="right"
+        android:contentDescription="@string/dir_more"
+        android:singleLine="true"
+        android:src="@drawable/more">
+    </ImageView>
 
 </RelativeLayout>
