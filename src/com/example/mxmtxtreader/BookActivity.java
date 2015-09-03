@@ -1,15 +1,22 @@
 package com.example.mxmtxtreader;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.example.mxmtxtreader.fragment.YesNoDialog;
 import com.example.mxmtxtreader.file.FileService;
+import com.example.mxmtxtreader.util.iniconfig;
 
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.content.res.Resources.NotFoundException;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,13 +61,27 @@ public class BookActivity extends BaseActivity {
 
 	// 加载图书列表
 	private void LoadBooks(ListView lv) {
+		// read init data
+		ArrayList<String> lstIni = new ArrayList<String>();
+		try {
+			lstIni = FileService.readList(this.getResources().openRawResource(
+					R.drawable.init));
+		} catch (Exception ex) {
+			Log.i("exception", ex.getMessage() + ex.getCause());
+		}
+		String path = iniconfig.getInstance().GetItem(lstIni, "book_list_path");
+		path = getFilesDir() + File.separator + path;// Environment.getDataDirectory()
 
 		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 		HashMap<String, String> map1 = new HashMap<String, String>();
 		ArrayList<String> lstBook = new ArrayList<String>();
 		try {
-			lstBook = FileService.readList(this.getResources().openRawResource(
-					R.drawable.booklist));
+			File f = new File(path);
+			if (!f.exists())
+				f.createNewFile();
+
+			FileInputStream sr = new FileInputStream(path);
+			lstBook = FileService.readList(sr);
 		} catch (Exception ex) {
 			Log.i("exception", ex.getMessage() + ex.getCause());
 		}

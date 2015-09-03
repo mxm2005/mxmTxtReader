@@ -10,8 +10,8 @@
 
     <TextView
         android:id="@+id/book_name"
-        android:layout_width="180dip"
-        android:layout_height="30dip"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:singleLine="true"
         android:textSize="10pt" />
 

@@ -1,15 +1,18 @@
 package com.example.mxmtxtreader;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.example.mxmtxtreader.file.FileService;
+import com.example.mxmtxtreader.util.iniconfig;
 
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.IntDef;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -36,21 +39,49 @@ public class ImportBook extends BaseActivity {
 				ArrayList<String> lstBook = new ArrayList<String>();
 
 				int count = lv.getChildCount();
+				String tmp = "";
 				for (int i = 0; i < count; i++) {
 					if (((CheckBox) lv.getChildAt(i).findViewById(R.id.chkBook))
 							.isChecked()) {
-						lstBook.add(((TextView) lv.getChildAt(i).findViewById(
-								R.id.book_addr)).getText().toString());
+						tmp = ((TextView) lv.getChildAt(i).findViewById(
+								R.id.book_name)).getText().toString()
+								+ ","
+								+ ((TextView) lv.getChildAt(i).findViewById(
+										R.id.book_addr)).getText().toString();
+						lstBook.add(tmp);
 					}
 				}
-				String ss = "";
-				for (int i = 0; i < lstBook.size(); i++) {
-					ss += "\r\n" + lstBook.get(i);
-				}
-				Log.i("btnImport", "---" + ss);
+
 				// write to booklist.txt
-				InputStream input= getResources().openRawResource(R.drawable.booklist);
-//				input.
+				ArrayList<String> lstIni = new ArrayList<String>();
+				ArrayList<String> lstOldBook = new ArrayList<String>();
+				try {
+					lstIni = FileService.readList(getResources()
+							.openRawResource(R.drawable.init));
+
+					String path = iniconfig.getInstance().GetItem(lstIni,
+							"book_list_path");
+					path = getFilesDir() + File.separator + path;
+					InputStream input = new FileInputStream(path);
+					lstOldBook = FileService.readList(input);
+					input.close();
+
+					String ss = "";
+					for (int i = 0; i < lstBook.size(); i++) {
+						if (!lstOldBook.contains(lstBook.get(i)))
+							ss += lstBook.get(i);
+						if (i != lstBook.size() - 1)
+							ss += "\r\n";
+					}
+
+					BufferedWriter os = new BufferedWriter(new FileWriter(path,true));
+					os.append(ss);
+					os.close();
+
+					// Log.i("btnImport", "---" + ss);
+				} catch (Exception ex) {
+					Log.i("exception", ex.getMessage() + ex.getCause());
+				}
 			}
 		});
 		initDir();
