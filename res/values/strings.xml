@@ -6,7 +6,8 @@
     <string name="menu_open">打开</string>
     <string name="menu_openbook">打开新书</string>
     <string name="menu_settings">设置</string>
-    <string name="menu_import">导入图书</string>
+    <string name="menu_import">导入</string>
+    <string name="menu_importbook">导入图书</string>
     <string name="read_prechapter">上一章</string>
     <string name="read_nextchapter">下一章</string>
     <string name="dir_root">根目录</string>

@@ -1,6 +1,7 @@
 package com.example.mxmtxtreader;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,6 +12,8 @@ import android.os.Environment;
 import android.support.annotation.IntDef;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -23,6 +26,33 @@ public class ImportBook extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.import_book);
 
+		Button btnImport = (Button) findViewById(R.id.btnImport);
+		btnImport.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				ListView lv = (ListView) findViewById(R.id.lstBook);
+				ArrayList<String> lstBook = new ArrayList<String>();
+
+				int count = lv.getChildCount();
+				for (int i = 0; i < count; i++) {
+					if (((CheckBox) lv.getChildAt(i).findViewById(R.id.chkBook))
+							.isChecked()) {
+						lstBook.add(((TextView) lv.getChildAt(i).findViewById(
+								R.id.book_addr)).getText().toString());
+					}
+				}
+				String ss = "";
+				for (int i = 0; i < lstBook.size(); i++) {
+					ss += "\r\n" + lstBook.get(i);
+				}
+				Log.i("btnImport", "---" + ss);
+				// write to booklist.txt
+				InputStream input= getResources().openRawResource(R.drawable.booklist);
+//				input.
+			}
+		});
 		initDir();
 	}
 
@@ -38,6 +68,7 @@ public class ImportBook extends BaseActivity {
 				map1.put("book_name", files[i].getName());
 				map1.put("book_addr", files[i].getAbsolutePath());
 				lstDir.add(map1);
+				// list.add(map1);
 			} else {
 				String fileName = files[i].getName().toLowerCase();
 				if (fileName.endsWith(".txt")) {
@@ -51,17 +82,17 @@ public class ImportBook extends BaseActivity {
 
 		ListView lv = (ListView) findViewById(R.id.lstBook);
 		ListView lvDir = (ListView) findViewById(R.id.lstDir);
-		//init list txt files
+		// init list txt files
 		SimpleAdapter listAdapter = new SimpleAdapter(this, list,
 				R.layout.book_item_imp,
 				new String[] { "book_name", "book_addr" }, new int[] {
 						R.id.book_name, R.id.book_addr });
 		lv.setAdapter(listAdapter);
-		//init list dir
+		// init list dir
 		SimpleAdapter lstDirAdapter = new SimpleAdapter(this, lstDir,
-				R.layout.book_item_imp_dir,
-				new String[] { "book_name", "book_addr" }, new int[] {
-						R.id.book_name, R.id.book_addr });
+				R.layout.book_item_imp_dir, new String[] { "book_name",
+						"book_addr" }, new int[] { R.id.book_name,
+						R.id.book_addr });
 		lvDir.setAdapter(lstDirAdapter);
 	}
 
