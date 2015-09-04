@@ -59,23 +59,21 @@ public class BookActivity extends BaseActivity {
 		}
 	}
 
-	// 加载图书列表
+	//load book list
 	private void LoadBooks(ListView lv) {
 		// read init data
+		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+		HashMap<String, String> map1 = new HashMap<String, String>();
+		ArrayList<String> lstBook = new ArrayList<String>();
+		
+		String path="";
 		ArrayList<String> lstIni = new ArrayList<String>();
 		try {
 			lstIni = FileService.readList(this.getResources().openRawResource(
 					R.drawable.init));
-		} catch (Exception ex) {
-			Log.i("exception", ex.getMessage() + ex.getCause());
-		}
-		String path = iniconfig.getInstance().GetItem(lstIni, "book_list_path");
-		path = getFilesDir() + File.separator + path;// Environment.getDataDirectory()
-
-		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-		HashMap<String, String> map1 = new HashMap<String, String>();
-		ArrayList<String> lstBook = new ArrayList<String>();
-		try {
+			path = iniconfig.getInstance().GetItem(lstIni, "book_list_path");
+			path = getFilesDir() + File.separator + path;// Environment.getDataDirectory()
+			
 			File f = new File(path);
 			if (!f.exists())
 				f.createNewFile();
