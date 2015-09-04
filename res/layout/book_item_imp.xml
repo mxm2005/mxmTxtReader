@@ -6,7 +6,8 @@
     android:paddingBottom="1dip"
     android:paddingLeft="1dip"
     android:paddingRight="1dip"
-    android:paddingTop="1dip">
+    android:paddingTop="1dip"
+    android:background="#EBEBEB">
 
     <ImageView
         android:id="@+id/book_img"

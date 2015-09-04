@@ -16,5 +16,8 @@
     <string name="dir_file">TXT文件</string>
     <string name="dir_empty">空文件夹，没有符合的文件</string>
     <string name="dir_more">更多</string>
+    <string name="show_ok">操作成功</string>
+    <string name="show_fail">操作失败</string>
+    <string name="show_except">操作异常</string>
 
 </resources>
