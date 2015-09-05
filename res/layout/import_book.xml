@@ -70,6 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:minHeight="50dip"
             android:paddingBottom="5dip"
             android:paddingTop="5dip" >
         </ListView>
@@ -78,6 +79,7 @@
             android:id="@+id/lstDir"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="50dip"
             android:layout_weight="1"
             android:paddingBottom="5dip"
             android:paddingTop="5dip" >

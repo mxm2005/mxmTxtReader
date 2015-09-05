@@ -102,7 +102,7 @@ public class ImportBook extends BaseActivity {
 					os.close();
 
 					showTip = R.string.show_ok;
-					// Log.i("btnImport", "---" + ss);
+					 Log.i("btnImport", "---" + ss);
 				} catch (Exception ex) {
 					Log.i("exception", ex.getMessage() + ex.getCause());
 					showTip = R.string.show_except;
@@ -145,7 +145,7 @@ public class ImportBook extends BaseActivity {
 
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
+			// TODO Auto-generated method stub 
 			String sPath = "";
 			String oPath = vNav.getText().toString();
 

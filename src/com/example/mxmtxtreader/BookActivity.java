@@ -78,7 +78,7 @@ public class BookActivity extends BaseActivity {
 			if (!f.exists())
 				f.createNewFile();
 
-			FileInputStream sr = new FileInputStream(path);
+			FileInputStream sr = new FileInputStream(f);
 			lstBook = FileService.readList(sr);
 		} catch (Exception ex) {
 			Log.i("exception", ex.getMessage() + ex.getCause());

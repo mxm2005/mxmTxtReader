@@ -23,7 +23,7 @@
     <TextView
         android:id="@+id/book_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="24dip"
         android:singleLine="true"
         android:layout_toRightOf="@id/book_img"
         android:layout_centerVertical="true">
@@ -32,7 +32,8 @@
     <TextView
         android:id="@+id/book_addr"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="24dip"
+        android:singleLine="true"
         android:visibility="invisible" 
         android:layout_toRightOf="@id/book_name"
         android:layout_centerVertical="true">
