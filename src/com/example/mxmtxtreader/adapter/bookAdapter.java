@@ -23,6 +23,6 @@ public class bookAdapter extends BaseAdapter {
 	
 	@Override
 	public View getView(int arg0,View v,ViewGroup vg){
-		return new View();
+		return v;
 	}
 }
