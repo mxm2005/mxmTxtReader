@@ -33,6 +33,12 @@ public class BookActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_book);
+		
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
 		ListView lv_books = (ListView) findViewById(R.id.lv_books);
 		LoadBooks(lv_books);
 		lv_books.setOnItemClickListener(new myOnItemClickListener());
@@ -85,6 +91,8 @@ public class BookActivity extends BaseActivity {
 		}
 
 		for (int i = 0; i < lstBook.size(); i++) {
+			if(lstBook.get(i).length()==0)
+				continue;
 			map1 = new HashMap<String, String>();
 			String[] a = lstBook.get(i).split(",");
 			map1.put("book_name", a[0]);

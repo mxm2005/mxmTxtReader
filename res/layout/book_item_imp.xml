@@ -7,12 +7,13 @@
 	android:paddingBottom="1dip"
 	android:paddingLeft="1dip"
 	android:paddingRight="1dip"
-	android:paddingTop="1dip" >
+	android:paddingTop="1dip"
+	android:layout_marginTop="5dip">
 
 	<CheckBox
 		android:id="@+id/chkBook"
 		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
+		android:layout_height="24dip"
 		android:layout_centerVertical="true"
 		android:layout_gravity="left"
 		android:singleLine="true" >

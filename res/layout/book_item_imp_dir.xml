@@ -3,16 +3,18 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="horizontal"
-    android:paddingBottom="5dip"
+    android:paddingBottom="1dip"
     android:paddingLeft="1dip"
-    android:paddingRight="5dip"
-    android:paddingTop="1dip" >
+    android:paddingRight="1dip"
+    android:paddingTop="1dip"
+	android:layout_marginTop="5dip">
 
     <ImageView
         android:id="@+id/book_img"
         android:layout_width="24dip"
         android:layout_height="24dip"
-        android:layout_gravity="left"
+        android:layout_gravity="center"
+        android:layout_marginLeft="5dip"
         android:contentDescription="@string/dir_floder"
         android:singleLine="true"
         android:src="@drawable/floder24" >

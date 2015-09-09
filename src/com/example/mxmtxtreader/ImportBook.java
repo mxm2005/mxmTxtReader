@@ -7,9 +7,12 @@ import java.io.FileWriter;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Stack;
+
 import com.example.mxmtxtreader.file.FileService;
 import com.example.mxmtxtreader.util.iniconfig;
 import com.example.mxmtxtreader.adapter.MultiLayoutSimpleAdapter;
+import com.example.mxmtxtreader.adapter.bookAdapter;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -54,8 +57,9 @@ public class ImportBook extends BaseActivity {
 				int count = lv.getChildCount();
 				String tmp = "";
 				for (int i = 0; i < count; i++) {
-					if (((CheckBox) lv.getChildAt(i).findViewById(R.id.chkBook))
-							.isChecked()) {
+					CheckBox chb = (CheckBox) lv.getChildAt(i).findViewById(
+							R.id.chkBook);
+					if (chb != null && chb.isChecked()) {
 						tmp = ((TextView) lv.getChildAt(i).findViewById(
 								R.id.book_name)).getText().toString()
 								+ ","
@@ -70,52 +74,16 @@ public class ImportBook extends BaseActivity {
 				// show result
 				Toast.makeText(getApplicationContext(), showTip,
 						Toast.LENGTH_SHORT).show();
-				startActivity(new Intent(getApplicationContext(),
-						BookActivity.class));
+//				startActivity(new Intent(getApplicationContext(),
+//						BookActivity.class));
+				finish();
 			}
 
-			private int btnImportClick(ArrayList<String> lstBook) {
-				int showTip;
-				// write to booklist.txt
-				ArrayList<String> lstIni = new ArrayList<String>();
-				ArrayList<String> lstOldBook = new ArrayList<String>();
-				try {
-					lstIni = FileService.readList(getResources()
-							.openRawResource(R.drawable.init));
-
-					String path = iniconfig.getInstance().GetItem(lstIni,
-							"book_list_path");
-					path = getFilesDir() + File.separator + path;
-					InputStream input = new FileInputStream(path);
-					lstOldBook = FileService.readList(input);
-					input.close();
-
-					String ss = "";
-					for (int i = 0; i < lstBook.size(); i++) {
-						if (!lstOldBook.contains(lstBook.get(i)))
-							ss += lstBook.get(i);
-						if (i != lstBook.size() - 1)
-							ss += "\r\n";
-					}
-
-					BufferedWriter os = new BufferedWriter(new FileWriter(path,
-							true));
-					os.append(ss);
-					os.close();
-
-					showTip = R.string.show_ok;
-					Log.i("btnImport", "---" + ss);
-				} catch (Exception ex) {
-					Log.i("exception", ex.getMessage() + ex.getCause());
-					showTip = R.string.show_except;
-				}
-				return showTip;
-			}
 		});
 
-		// // init dir onClick
-		// ListView lvDir = (ListView) findViewById(R.id.lstDir);
-		// lvDir.setOnItemClickListener(dirClickListener);
+		// init dir onClick
+		ListView lvDir = (ListView) findViewById(R.id.lstBook);
+		lvDir.setOnItemClickListener(dirClickListener);
 
 		// init btnPreView onClick
 		Button btnPreView = (Button) findViewById(R.id.btnPreView);
@@ -124,6 +92,48 @@ public class ImportBook extends BaseActivity {
 		lbtnPreView.setOnClickListener(btnPreViewClick);
 
 		initDir();
+	}
+
+	private int btnImportClick(ArrayList<String> lstBook) {
+		int showTip;
+		// write to booklist.txt
+		ArrayList<String> lstIni = new ArrayList<String>();
+		ArrayList<String> lstOldBook = new ArrayList<String>();
+		try {
+			lstIni = FileService.readList(getResources().openRawResource(
+					R.drawable.init));
+
+			String path = iniconfig.getInstance().GetItem(lstIni,
+					"book_list_path");
+			path = getFilesDir() + File.separator + path;
+			InputStream input = new FileInputStream(path);
+			lstOldBook = FileService.readList(input);
+			input.close();
+			
+			//merger array
+			for (String str:lstBook) {
+				if (!lstOldBook.contains(str))
+					lstOldBook.add(str);
+			}
+
+			String ss = "";
+			for (int i = 0; i < lstOldBook.size(); i++) {
+					ss += lstOldBook.get(i);
+				if (i != lstOldBook.size() - 1)
+					ss += "\r\n";
+			}
+
+			BufferedWriter os = new BufferedWriter(new FileWriter(path, false));
+			os.write(ss);
+			os.close();
+
+			showTip = R.string.show_ok;
+			Log.i("btnImport", "---" + ss);
+		} catch (Exception ex) {
+			Log.i("exception", ex.getMessage() + ex.getCause());
+			showTip = R.string.show_except;
+		}
+		return showTip;
 	}
 
 	OnItemClickListener dirClickListener = new OnItemClickListener() {
@@ -135,8 +145,9 @@ public class ImportBook extends BaseActivity {
 
 				if (fs == null || fs.length == 0) {
 					vNofile.setVisibility(View.VISIBLE);
-				} else
+				} else {
 					vNofile.setVisibility(View.INVISIBLE);
+				}
 				initData(fs);
 			}
 
@@ -175,50 +186,23 @@ public class ImportBook extends BaseActivity {
 	// load txt file list in the dir
 	private void initData(File[] files) {
 		ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-		// ArrayList<HashMap<String, String>> lstDir = new
-		// ArrayList<HashMap<String, String>>();
 		HashMap<String, String> map1 = new HashMap<String, String>();
 
-		for (int i = 0; i < files.length; i++) {
-			if (isValidFileOrDir(files[i])) {
-				map1 = new HashMap<String, String>();
-				map1.put("book_name", files[i].getName());
-				map1.put("book_addr", files[i].getAbsolutePath());
-				list.add(map1);
+		if (files != null && files.length > 0) {
+			for (int i = 0; i < files.length; i++) {
+				if (isValidFileOrDir(files[i])) {
+					map1 = new HashMap<String, String>();
+					map1.put("book_name", files[i].getName());
+					map1.put("book_addr", files[i].getAbsolutePath());
+					list.add(map1);
+				}
 			}
-			// if (files[i].isDirectory()) {
-			// map1 = new HashMap<String, String>();
-			// map1.put("book_name", files[i].getName());
-			// map1.put("book_addr", files[i].getAbsolutePath());
-			// lstDir.add(map1);
-			// // list.add(map1);
-			// } else {
-			// String fileName = files[i].getName().toLowerCase();
-			// if (fileName.endsWith(".txt")) {
-			// map1 = new HashMap<String, String>();
-			// map1.put("book_name", files[i].getName());
-			// map1.put("book_addr", files[i].getAbsolutePath());
-			// list.add(map1);
-			// }
-			// }
 		}
 
 		ListView lv = (ListView) findViewById(R.id.lstBook);
-		// ListView lvDir = (ListView) findViewById(R.id.lstDir);
-		// init list txt files
-		MultiLayoutSimpleAdapter listAdapter = new MultiLayoutSimpleAdapter(
-				this, list, new int[] { R.layout.book_item_imp,
-						R.layout.book_item_imp_dir }, new String[] {
-						"book_name", "book_addr" }, new int[] { R.id.book_name,
-						R.id.book_addr });
+		// init adapter
+		bookAdapter listAdapter = new bookAdapter(this, list);
 		lv.setAdapter(listAdapter);
-
-		// //init list dir
-		// SimpleAdapter lstDirAdapter = new SimpleAdapter(this, lstDir,
-		// R.layout.book_item_imp_dir, new String[] { "book_name",
-		// "book_addr" }, new int[] { R.id.book_name,
-		// R.id.book_addr });
-		// lvDir.setAdapter(lstDirAdapter);
 	}
 
 	private void initDir() {
