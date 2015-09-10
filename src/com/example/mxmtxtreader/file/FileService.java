@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
 public class FileService {
@@ -30,6 +31,18 @@ public class FileService {
 		read.close();
 
 		return fileContent;
+	}
+
+	public static long getCount(String path) throws Exception {
+		long reVal = -1;
+		RandomAccessFile rf;
+		try {
+			rf = new RandomAccessFile(path, "r");
+			reVal = rf.length();
+		} catch (Exception ex) {
+			throw ex;
+		}
+		return reVal;
 	}
 
 	public static ArrayList<String> readList(InputStream inStream)

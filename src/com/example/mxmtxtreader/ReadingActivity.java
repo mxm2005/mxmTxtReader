@@ -35,13 +35,20 @@ public class ReadingActivity extends BaseActivity {
 		Log.i("tag", "exec here now");
 		TextView vContent = (TextView) findViewById(R.id.viewContent);
 		try {
-			FileInputStream os = new FileInputStream(bookAddr);			
+			FileInputStream os = new FileInputStream(bookAddr);
 			String data = FileService.read(os);
 			os.close();
+
+			long len = 0;
+			len = FileService.getCount(bookAddr);
+			((TextView) findViewById(R.id.btnPreChapter)).setText(len + "");
 			vContent.setText(data);
 			System.out.println("Created file\n");
 		} catch (IOException e) {
 			System.out.print("Write Exception\n");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 		TextView vCurChapter = (TextView) findViewById(R.id.txtCurChapter);
