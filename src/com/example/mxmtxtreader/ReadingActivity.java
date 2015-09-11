@@ -16,8 +16,8 @@ import com.example.mxmtxtreader.file.FileService;
 
 @SuppressLint("ShowToast")
 public class ReadingActivity extends BaseActivity {
-	private int _pageSize = 0;
-	private int _pageIndex = 0;
+	private int _pageSize = 900;
+	private int _pageIndex = 1;
 	private long _totalCount = 0;
 
 	@Override
@@ -35,13 +35,13 @@ public class ReadingActivity extends BaseActivity {
 		Log.i("tag", "exec here now");
 		TextView vContent = (TextView) findViewById(R.id.viewContent);
 		try {
-			FileInputStream os = new FileInputStream(bookAddr);			
-			String data = FileService.read(os);
-			os.close();
+			String enCoding = FileService.GetEncoding(bookAddr);
+			String data = FileService.readPage(bookAddr, _pageSize, _pageIndex,
+					enCoding);
 			vContent.setText(data);
-			System.out.println("Created file\n");
 		} catch (IOException e) {
 			System.out.print("Write Exception\n");
+			Log.e("ex", e.getMessage() + e.getCause() + e.getStackTrace());
 		}
 
 		TextView vCurChapter = (TextView) findViewById(R.id.txtCurChapter);

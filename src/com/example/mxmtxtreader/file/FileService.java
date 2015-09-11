@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
+import java.io.StringReader;
 import java.util.ArrayList;
 
 public class FileService {
@@ -32,6 +34,22 @@ public class FileService {
 		return fileContent;
 	}
 
+	public static String readPage(String filePath, int pageSize, int pageIndex,
+			String enCoding) throws IOException {
+		String fileContent = "";
+		// 只读方式打开文件
+		RandomAccessFile r = new RandomAccessFile(new File(filePath), "r");
+		// 指定下一次的开始位置
+		r.seek(pageSize * (pageIndex - 1 < 0 ? 0 : pageIndex - 1));
+
+		byte[] bs = new byte[pageSize];
+		r.read(bs);
+		fileContent = new String(bs, enCoding);
+		r.close();
+
+		return fileContent;
+	}
+
 	public static ArrayList<String> readList(InputStream inStream)
 			throws IOException {
 		ArrayList<String> reLst = new ArrayList<String>();
@@ -45,6 +63,35 @@ public class FileService {
 		read.close();
 
 		return reLst;
+	}
+
+	public static String GetEncoding(String path) throws IOException {
+		String reVal = "";
+		File file = new File(path);
+		FileInputStream fis = new FileInputStream(file);
+		BufferedInputStream in = new BufferedInputStream(fis);
+		in.mark(4);
+		byte[] first3bytes = new byte[3];
+		in.read(first3bytes);
+		in.reset();
+		in.close();
+
+		if (first3bytes[0] == (byte) 0xEF && first3bytes[1] == (byte) 0xBB
+				&& first3bytes[2] == (byte) 0xBF) {
+			reVal = "utf-8";
+		} else if (first3bytes[0] == (byte) 0xFF
+				&& first3bytes[1] == (byte) 0xFE) {
+			reVal = "unicode";
+		} else if (first3bytes[0] == (byte) 0xFE
+				&& first3bytes[1] == (byte) 0xFF) {
+			reVal = "utf-16be";
+		} else if (first3bytes[0] == (byte) 0xFF
+				&& first3bytes[1] == (byte) 0xFF) {
+			reVal = "utf-16le";
+		} else {
+			reVal = "GB2312";
+		}
+		return reVal;
 	}
 
 	public String convertCodeAndGetText(String str_filepath) {
