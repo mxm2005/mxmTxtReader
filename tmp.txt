@@ -1,2 +1,9 @@
 http://www.cnblogs.com/tinyphp/p/3849302.html
 http://www.cnblogs.com/TomXu/archive/2011/11/21/2257154.html
+
+安卓小说阅读器实现之一 计算TextView所能容纳的字数
+http://blog.csdn.net/martianstudio/article/details/42676871
+http://www.gimoo.net/t/1505/554ed7c19db8b.html
+
+ 一个针对电子书阅读的划屏库libsliding
+https://github.com/mxm2005/SlidingLayout
