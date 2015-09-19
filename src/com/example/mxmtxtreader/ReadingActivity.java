@@ -13,19 +13,30 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.mxmtxtreader.file.FileService;
+import com.example.mxmtxtreader.component.ReadingTextView;
 
 @SuppressLint("ShowToast")
 public class ReadingActivity extends BaseActivity {
-	private int _pageSize = 0;
-	private int _pageIndex = 0;
-	private long _totalCount = 0;
+	private int mPageSize = 0;
+	private int mPageIndex = 1;
+	private long mTotalCount = 0;
+	private long mTotalPage = 0;
+
+	private ReadingTextView vContent;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.reading_book);
 
+		initView();
 		InitData();
+	}
+
+	void initView() {
+		vContent = (ReadingTextView) findViewById(R.id.viewContent);
+		vContent=new ReadingTextView(this);
+		mPageSize = getPageSize();
 	}
 
 	private void InitData() {
@@ -33,17 +44,23 @@ public class ReadingActivity extends BaseActivity {
 		String bookName = inite.getStringExtra("book_name");
 		String bookAddr = inite.getStringExtra("book_addr");
 		Log.i("tag", "exec here now");
-		TextView vContent = (TextView) findViewById(R.id.viewContent);
 		try {
 			FileInputStream os = new FileInputStream(bookAddr);
+			
+
+			mTotalCount = FileService.getCount(bookAddr);
+			//mTotalPage = mTotalCount / mPageSize;
+			
 			String data = FileService.read(os);
 			os.close();
 
-			long len = 0;
-			len = FileService.getCount(bookAddr);
-			((TextView) findViewById(R.id.btnPreChapter)).setText(len + "");
+			((TextView) findViewById(R.id.btnPreChapter)).setText(mTotalCount
+					+ "");
 			vContent.setText(data);
-			System.out.println("Created file\n");
+
+			Log.d("custom", "totalW---" + mTotalCount + "--totalP---"
+					+ mTotalPage + "--size---" + mPageSize);
+
 		} catch (IOException e) {
 			System.out.print("Write Exception\n");
 		} catch (Exception e) {
@@ -53,6 +70,15 @@ public class ReadingActivity extends BaseActivity {
 
 		TextView vCurChapter = (TextView) findViewById(R.id.txtCurChapter);
 		vCurChapter.setText(bookName);
+	}
+
+	int getPageSize() {
+//		int size = 0;
+//		int lineCount = vContent.getHeight() / vContent.getLineHeight();
+//		float lineWords = vContent.getWidth() / vContent.getTextSize();
+//		size = lineCount * ((int) lineWords);
+//		return size;
+		return vContent.getEstimatedLength();
 	}
 
 }

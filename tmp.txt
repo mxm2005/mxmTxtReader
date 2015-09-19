@@ -7,3 +7,8 @@ http://www.gimoo.net/t/1505/554ed7c19db8b.html
 
  一个针对电子书阅读的划屏库libsliding
 https://github.com/mxm2005/SlidingLayout
+
+
+http://stackoverflow.com/questions/14276853/how-to-measure-textview-height-based-on-device-width-and-font-size
+http://stackoverflow.com/questions/19908003/getting-height-of-text-view-before-rendering-to-layout
+http://anton46.com/android-textview-height-width-measurement/
