@@ -2,85 +2,122 @@ package com.example.mxmtxtreader;
 
 import java.io.IOException;
 
+import android.R.integer;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Layout;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mxmtxtreader.file.FileService;
+import com.example.mxmtxtreader.component.ReadingTextView;
+import com.example.mxmtxtreader.util.viewmeasurement;
+import com.example.mxmtxtreader.util.viewmeasurement.meaview;
 
 @SuppressLint("ShowToast")
 public class ReadingActivity extends BaseActivity implements OnClickListener {
-	private int _pageSize = 1200;
-	private int _pageIndex = 1;
-	private long _totalCount = 0;
-	TextView vContent;
+	private String mBookAddr;
+	private String encoding;
+
+	private int mPageSize = 1200;
+	private int mPageIndex = 1;
+	private long mTotalCount = 0;
+	private int mTotalPage = 0;
+	ReadingTextView vContent;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.reading_book);
 
-		vContent = (TextView) findViewById(R.id.viewContent);
+		initView();
+		// testScreen();
 		InitData();
-		TextView btnNext = (TextView) findViewById(R.id.txtNextChapter);
-		btnNext.setOnClickListener(this);
 	}
 
 	// Implement the OnClickListener callback
 	public void onClick(View v) {
-		vContent.append("目前还差短信发送及人员配置");
+		// vContent.append("目前还差短信发送及人员配置");
 		// Toast.makeText(getApplicationContext(),
 		// ss,Toast.LENGTH_SHORT).show();
+		if (v.getId() == R.id.txtNextChapter) {// next chapter
+			mPageIndex++;
+			GetPageContent(mBookAddr);
+		}
+	}
 
-		InitScreen();
+	void initView() {
+		vContent = (ReadingTextView) findViewById(R.id.viewContent);
+		TextView btnNext = (TextView) findViewById(R.id.txtNextChapter);
+		btnNext.setOnClickListener(this);
+
+		mPageSize = getPageSize();
 	}
 
 	private void InitData() {
 		Intent inite = getIntent();
 		String bookName = inite.getStringExtra("book_name");
-		String bookAddr = inite.getStringExtra("book_addr");
-		Log.i("tag", "exec here now");
-
+		mBookAddr = inite.getStringExtra("book_addr");
 		try {
-			String enCoding = FileService.GetEncoding(bookAddr);
-			String data = FileService.readPage(bookAddr, _pageSize, _pageIndex,
-					enCoding);
-			long len = 0;
-			len = FileService.getCount(bookAddr);
-			((TextView) findViewById(R.id.txtPreChapter)).setText(len + "");
-			vContent.setText(data);
-
-			InitScreen();
-		} catch (IOException e) {
-			System.out.print("Write Exception\n");
-			Log.e("ex", e.getMessage() + e.getCause() + e.getStackTrace());
+			encoding = FileService.GetEncoding(mBookAddr);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// TODO: handle exception
+			Log.e("ex", e.getMessage() + e.getCause() + e.getStackTrace());
 		}
+		GetPageContent(mBookAddr);
 
 		TextView vCurChapter = (TextView) findViewById(R.id.txtCurChapter);
 		vCurChapter.setText(bookName);
 	}
 
-	private void InitScreen() {
-		Layout l = vContent.getLayout();
-		if (l != null) {
-			int lines = l.getLineCount();
-			Log.i("line", ""+lines);
-			
-			if (lines > 0)
-				if (l.getEllipsisCount(lines - 1) > 0)
-					Log.d("screen", "Text is ellipsized");
+	private void GetPageContent(String bookAddr) {
+		try {
+			String data = FileService.readPage(bookAddr, mPageSize, mPageIndex,
+					encoding);
+			vContent.setText(data);
+		} catch (IOException e) {
+			Log.e("ex", e.getMessage() + e.getCause() + e.getStackTrace());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
+	int getPageSize() {
+		int size = 0;
+		StringBuilder sb = new StringBuilder();
+		for (int i = 1; i < 100; i++) {
+			sb.append("测");
+		}
+		vContent.setText(sb.toString());
+		vContent.measure(0, 0);
+		meaview v = viewmeasurement.measure(vContent, sb.toString());
+		v.width = vContent.getWidth();
+		v.height = vContent.getHeight();
+		Log.d("custom", "width--" + v.width + "\r\nheight--" + v.height);
+		Log.d("custom", "parent width--" + 0 + "\r\nheight--" + v.height);
+		// v = viewmeasurement.measure(vContent, tmp);
+
+		float lineCount = vContent.iWidth / vContent.getLineHeight();
+		float lineWords = vContent.iHeith / vContent.getTextSize();
+		size = ((int) lineCount * (int) lineWords);
+		return size;
+	}
+
+	void testScreen() {
+		DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
+		int width = displayMetrics.widthPixels;
+		int height = displayMetrics.heightPixels;
+		Log.d("custom", "screen:" + width + "--" + height);
+	}
 }

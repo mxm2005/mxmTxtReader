@@ -100,7 +100,7 @@ public class FileService {
 				&& first3bytes[1] == (byte) 0xFF) {
 			reVal = "utf-16le";
 		} else {
-			reVal = "GB2312";
+			reVal = "GBK";
 		}
 		return reVal;
 	}
