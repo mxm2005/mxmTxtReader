@@ -49,6 +49,17 @@ public class FileService {
 
 		return fileContent;
 	}
+	public static long getCount(String path) throws Exception {
+		long reVal = -1;
+		RandomAccessFile rf;
+		try {
+			rf = new RandomAccessFile(path, "r");
+			reVal = rf.length();
+		} catch (Exception ex) {
+			throw ex;
+		}
+		return reVal;
+	}
 
 	public static ArrayList<String> readList(InputStream inStream)
 			throws IOException {
