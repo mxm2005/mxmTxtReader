@@ -19,5 +19,8 @@
     <string name="show_ok">操作成功</string>
     <string name="show_fail">操作失败</string>
     <string name="show_except">操作异常</string>
+    <string name="backlight_title">夜间模式</string>
+    <string name="system">系统</string>
+    <string name="hello">Hello World, turntest!</string>
 
 </resources>

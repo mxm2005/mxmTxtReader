@@ -4,6 +4,9 @@ import java.io.IOException;
 
 import android.R.integer;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -54,12 +57,19 @@ public class ReadingActivity extends BaseActivity implements OnClickListener {
 			mPageIndex++;
 			GetPageContent(mBookAddr);
 		}
+		if (v.getId() == R.id.txtPreChapter) {// last chapter
+			mPageIndex--;
+			if (mPageIndex <= 0)
+				mPageIndex = 1;
+			GetPageContent(mBookAddr);
+		}
 	}
 
 	void initView() {
 		vContent = (ReadingTextView) findViewById(R.id.viewContent);
 		TextView btnNext = (TextView) findViewById(R.id.txtNextChapter);
 		btnNext.setOnClickListener(this);
+		((TextView) findViewById(R.id.txtPreChapter)).setOnClickListener(this);
 
 		mPageSize = getPageSize();
 	}
@@ -102,22 +112,31 @@ public class ReadingActivity extends BaseActivity implements OnClickListener {
 		vContent.setText(sb.toString());
 		vContent.measure(0, 0);
 		meaview v = viewmeasurement.measure(vContent, sb.toString());
-		v.width = vContent.getWidth();
-		v.height = vContent.getHeight();
+		// v.width = vContent.getWidth();
+		// v.height = vContent.getHeight();
+		float[] arr = testScreen();
+		v.width = arr[0];
+		v.height = arr[1] - 22;
 		Log.d("custom", "width--" + v.width + "\r\nheight--" + v.height);
 		Log.d("custom", "parent width--" + 0 + "\r\nheight--" + v.height);
 		// v = viewmeasurement.measure(vContent, tmp);
 
-		float lineCount = vContent.iWidth / vContent.getLineHeight();
-		float lineWords = vContent.iHeith / vContent.getTextSize();
+		float lineCount = v.width
+				/ (vContent.getLineHeight() + vContent.getScaleX());
+		float lineWords = v.height
+				/ (vContent.getTextSize() + vContent.getScaleY());
 		size = ((int) lineCount * (int) lineWords);
 		return size;
 	}
 
-	void testScreen() {
+	float[] testScreen() {
+		float[] reVal = new float[2];
 		DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
 		int width = displayMetrics.widthPixels;
 		int height = displayMetrics.heightPixels;
+		reVal[0] = width;
+		reVal[1] = height;
 		Log.d("custom", "screen:" + width + "--" + height);
+		return reVal;
 	}
 }

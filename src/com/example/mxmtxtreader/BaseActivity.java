@@ -34,15 +34,18 @@ public class BaseActivity extends Activity {
 			startActivity(inite);
 			return true;
 		case R.id.menu_settings:
-			DialogFragment dialog = new YesNoDialog();
-			Bundle args = new Bundle();
-			args.putString("title", "test title");
-			args.putString("message", "test messqge");
-			dialog.setArguments(args);
-			int YES_NO_CALL = 101;
-			dialog.setTargetFragment(dialog, YES_NO_CALL);
-			dialog.show(getFragmentManager(), "tag");
+//			DialogFragment dialog = new YesNoDialog();
+//			Bundle args = new Bundle();
+//			args.putString("title", "test title");
+//			args.putString("message", "test messqge");
+//			dialog.setArguments(args);
+//			int YES_NO_CALL = 101;
+//			dialog.setTargetFragment(dialog, YES_NO_CALL);
+//			dialog.show(getFragmentManager(), "tag");
+			inite.setClass(this.getApplicationContext(), turntest.class);
+			startActivity(inite);
 			return true;
+			
 		}
 		return super.onOptionsItemSelected(item);
 	}

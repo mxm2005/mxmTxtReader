@@ -10,7 +10,7 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.GET_PACKAGE_SIZE" />
-    
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -31,6 +31,10 @@
         </activity>
         <activity
             android:name=".ImportBook"
+            android:label="@string/menu_import" >
+        </activity>
+        <activity
+            android:name=".turntest"
             android:label="@string/menu_import" >
         </activity>
     </application>
